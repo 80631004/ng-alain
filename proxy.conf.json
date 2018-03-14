@@ -1,0 +1,12 @@
+{
+  "/admin": {
+    "target": "http://123.207.62.116",
+    "secure": false
+  },
+  "/auth": {
+    "target": "http://123.207.62.116",
+    "secure": false
+  },
+  "logLevel": "debug",
+  "changeOrigin": true
+}

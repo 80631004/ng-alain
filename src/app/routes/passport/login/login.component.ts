@@ -6,12 +6,13 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { SocialService, SocialOpenType, ITokenService, DA_SERVICE_TOKEN } from '@delon/auth';
 import { ReuseTabService } from '@delon/abc';
 import { environment } from '@env/environment';
+import { LoginService } from 'app/routes/passport/login/login.service';
 
 @Component({
     selector: 'passport-login',
     templateUrl: './login.component.html',
     styleUrls: [ './login.component.less' ],
-    providers: [ SocialService ]
+    providers: [ SocialService, LoginService ]
 })
 export class UserLoginComponent implements OnDestroy {
 
@@ -26,6 +27,7 @@ export class UserLoginComponent implements OnDestroy {
         public msg: NzMessageService,
         private settingsService: SettingsService,
         private socialService: SocialService,
+        private loginService: LoginService,
         @Optional() @Inject(ReuseTabService) private reuseTabService: ReuseTabService,
         @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService) {
         this.form = fb.group({
@@ -56,7 +58,8 @@ export class UserLoginComponent implements OnDestroy {
 
     count = 0;
     interval$: any;
-    verifyCodeImgUrl = "http://123.207.62.116/admin/code/5746_1521007081419";
+    randomStr = Math.ceil(Math.random() * 100000) + Date.now() ;
+    verifyCodeImgUrl = '/admin/code/' + this.randomStr ;
 
     getCaptcha() {
         this.count = 59;
@@ -67,8 +70,9 @@ export class UserLoginComponent implements OnDestroy {
         }, 1000);
     }
 
-    refreshVerifyCode(){
-
+    refreshVerifyCode() {
+         this.randomStr = Math.ceil(Math.random() * 100000) + Date.now() ;
+        this.verifyCodeImgUrl = '/admin/code/' + this.randomStr ;
     }
 
     // endregion
@@ -78,13 +82,23 @@ export class UserLoginComponent implements OnDestroy {
         if (this.type === 0) {
             this.userName.markAsDirty();
             this.password.markAsDirty();
-            if (this.userName.invalid || this.password.invalid) return;
+            this.verifyCode.markAsDirty();
+            if (this.userName.invalid || this.password.invalid || this.verifyCode.invalid) return;
         } else {
             this.mobile.markAsDirty();
             this.captcha.markAsDirty();
             if (this.mobile.invalid || this.captcha.invalid) return;
         }
+
+        this.loginService.login({
+            'type': this.type,
+            'username': this.userName.value,
+            'password': this.password.value,
+             'randomStr': this.randomStr,
+             'code': this.verifyCode.value
+        });
         // mock http
+        /*
         this.loading = true;
         setTimeout(() => {
             this.loading = false;
@@ -105,7 +119,7 @@ export class UserLoginComponent implements OnDestroy {
                 time: +new Date
             });
             this.router.navigate(['/']);
-        }, 1000);
+        }, 1000);*/
     }
 
     // region: social

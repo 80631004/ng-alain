@@ -15,7 +15,7 @@
   "scripts": {
     "precommit": "npm run lint-staged",
     "ng": "ng",
-    "start": "ng serve -o",
+    "start": "ng serve -o --proxy-config proxy.conf.json",
     "serve:hmr": "ng serve -o --hmr -e=hmr",
     "build": "ng build --prod --build-optimizer",
     "analyze": "ng build --prod --build-optimizer --stats-json",
@@ -109,7 +109,8 @@
     "tslint": "~5.7.0",
     "typescript": "~2.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
-    "xlsx": "^0.11.16"
+    "xlsx": "^0.11.16",
+    "rxjs": "^5.5.5"
   },
   "lint-staged": {
     "src/**/*.ts": "lint:ts",

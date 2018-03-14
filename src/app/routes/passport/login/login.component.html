@@ -30,18 +30,18 @@
             <div nz-form-item>
                 <div nz-form-control [nzValidateStatus]="verifyCode">
                     <div nz-row [nzGutter]="8">
-                            <div nz-col [nzSpan]="12">
-                                <nz-input formControlName="verifyCode" [nzPlaceHolder]=""  [nzSize]="'large'">
+                            <div nz-col [nzSpan]="10">
+                                <nz-input formControlName="verifyCode" [nzPlaceHolder]="'请输入验证码'"  [nzSize]="'large'">
                                     <ng-template #prefix>
                                         <i class="anticon anticon-lock"></i>
                                     </ng-template>
                                 </nz-input>
                             </div>
-                            <div nz-col [nzSpan]="8">
-                                    <img class="img-verify change-verify" src="{{verifyCodeImgUrl}}" (click)="refreshVerifyCode()" style="height:40px;width:100px;">
+                            <div nz-col [nzSpan]="9">
+                                    <img  src="{{verifyCodeImgUrl}}" (click)="refreshVerifyCode()" >
                             </div>
-                            <div nz-col [nzSpan]="4">
-                                    <a class="change-verify" (click)="refreshVerifyCode()">换一张</a>
+                            <div nz-col [nzSpan]="5" style='vertical-align:middle;text-align:center;'>
+                                    <a  (click)="refreshVerifyCode()">换一张</a>
                             </div>
                     </div>
                     <div nz-form-explain *ngIf="(verifyCode.dirty || verifyCode.touched) && verifyCode.errors?.required">请输入验证码！</div>
