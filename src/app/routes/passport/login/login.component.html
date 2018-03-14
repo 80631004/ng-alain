@@ -26,6 +26,28 @@
                     <div nz-form-explain *ngIf="(password.dirty || password.touched) && password.errors?.required">请输入密码！</div>
                 </div>
             </div>
+
+            <div nz-form-item>
+                <div nz-form-control [nzValidateStatus]="verifyCode">
+                    <div nz-row [nzGutter]="8">
+                            <div nz-col [nzSpan]="12">
+                                <nz-input formControlName="verifyCode" [nzPlaceHolder]=""  [nzSize]="'large'">
+                                    <ng-template #prefix>
+                                        <i class="anticon anticon-lock"></i>
+                                    </ng-template>
+                                </nz-input>
+                            </div>
+                            <div nz-col [nzSpan]="8">
+                                    <img class="img-verify change-verify" src="{{verifyCodeImgUrl}}" (click)="refreshVerifyCode()" style="height:40px;width:100px;">
+                            </div>
+                            <div nz-col [nzSpan]="4">
+                                    <a class="change-verify" (click)="refreshVerifyCode()">换一张</a>
+                            </div>
+                    </div>
+                    <div nz-form-explain *ngIf="(verifyCode.dirty || verifyCode.touched) && verifyCode.errors?.required">请输入验证码！</div>
+                </div>
+            </div>
+
         </nz-tab>
         <nz-tab>
             <ng-template #nzTabHeading>手机号登录</ng-template>

@@ -33,6 +33,7 @@ export class UserLoginComponent implements OnDestroy {
             password: [null, Validators.required],
             mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
             captcha: [null, [Validators.required]],
+            verifyCode: [null, [Validators.required]],
             remember: [true]
         });
     }
@@ -43,6 +44,7 @@ export class UserLoginComponent implements OnDestroy {
     get password() { return this.form.controls.password; }
     get mobile() { return this.form.controls.mobile; }
     get captcha() { return this.form.controls.captcha; }
+    get verifyCode() { return this.form.controls.verifyCode; }
 
     // endregion
 
@@ -54,6 +56,7 @@ export class UserLoginComponent implements OnDestroy {
 
     count = 0;
     interval$: any;
+    verifyCodeImgUrl = "http://123.207.62.116/admin/code/5746_1521007081419";
 
     getCaptcha() {
         this.count = 59;
@@ -62,6 +65,10 @@ export class UserLoginComponent implements OnDestroy {
             if (this.count <= 0)
                 clearInterval(this.interval$);
         }, 1000);
+    }
+
+    refreshVerifyCode(){
+
     }
 
     // endregion
