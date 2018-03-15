@@ -109,8 +109,7 @@
     "tslint": "~5.7.0",
     "typescript": "~2.6.0",
     "webpack-bundle-analyzer": "^2.9.0",
-    "xlsx": "^0.11.16",
-    "rxjs": "^5.5.5"
+    "xlsx": "^0.11.16"
   },
   "lint-staged": {
     "src/**/*.ts": "lint:ts",

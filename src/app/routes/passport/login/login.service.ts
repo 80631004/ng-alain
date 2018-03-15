@@ -30,15 +30,16 @@ export class LoginService {
         return new Promise((resolve, reject) => {
             const obs : Observable < HttpResponse < Object >> = this
                 .http
-                .post('http://123.207.62.116/auth/oauth/token', null, data {
+                .post('http://123.207.62.116/auth/oauth/token', null, data, {
                     headers: {
                         'Authorization': 'Basic cGlnOnBpZw=='
                     },
                     observe: 'response'
-                }).map(authenticateSuccess.bind(this));
+                });
 
             obs.subscribe((data) => {
                 resolve(data);
+                authenticateSuccess(data);
                 return cb();
             }, (err) => {
                 console.log(err);

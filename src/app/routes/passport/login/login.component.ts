@@ -59,7 +59,7 @@ export class UserLoginComponent implements OnDestroy {
     count = 0;
     interval$: any;
     randomStr = Math.ceil(Math.random() * 100000) + Date.now() ;
-    verifyCodeImgUrl = '/admin/code/' + this.randomStr ;
+    verifyCodeImgUrl = 'http://123.207.62.116/admin/code/' + this.randomStr ;
 
     getCaptcha() {
         this.count = 59;
@@ -72,7 +72,7 @@ export class UserLoginComponent implements OnDestroy {
 
     refreshVerifyCode() {
          this.randomStr = Math.ceil(Math.random() * 100000) + Date.now() ;
-        this.verifyCodeImgUrl = '/admin/code/' + this.randomStr ;
+        this.verifyCodeImgUrl = 'http://123.207.62.116/admin/code/' + this.randomStr ;
     }
 
     // endregion
