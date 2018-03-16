@@ -14,8 +14,7 @@ export class LoginService {
 
     constructor(private http : _HttpClient, @Optional()@Inject(ReuseTabService)private reuseTabService : ReuseTabService, @Inject(DA_SERVICE_TOKEN)private tokenService : ITokenService) {}
 
-    login(credentials, callback
-        ?) {
+    login(credentials, callback?) {
         const cb = callback || function () {};
 
         const data = {
@@ -28,18 +27,16 @@ export class LoginService {
         };
 
         return new Promise((resolve, reject) => {
-            const obs : Observable < HttpResponse < Object >> = this
-                .http
-                .post('http://123.207.62.116/auth/oauth/token', null, data, {
+            const obs: Observable < HttpResponse < Object >> = this.http.post('auth/oauth/token', null, data, {
                     headers: {
                         'Authorization': 'Basic cGlnOnBpZw=='
                     },
                     observe: 'response'
                 });
 
-            obs.subscribe((data) => {
-                resolve(data);
-                authenticateSuccess(data);
+            obs.subscribe((response) => {
+                resolve(response);
+                this.authenticateSuccess(response,credentials);
                 return cb();
             }, (err) => {
                 console.log(err);
@@ -47,22 +44,21 @@ export class LoginService {
                 return cb(err);
             });
         });
+    }
 
-        function authenticateSuccess(resp) {
-            // 清空路由复用信息
-            this
-                .reuseTabService
-                .clear();
-            this
-                .tokenService
-                .set({
-                    token: resp.access_token,
-                    name: this.userName.value,
-                    email: `cipchk@qq.com`,
-                    id: 10000,
-                    time: + new Date
-                });
-            return '';
-        }
+    authenticateSuccess(resp,credentials) {
+        // 清空路由复用信息
+        this.reuseTabService.clear();
+        var data = resp.body;
+        this.tokenService.set({
+                token: data.access_token,
+                name: credentials.username,
+                //email: `cipchk@qq.com`,
+                //id: 10000,
+                time: + new Date,
+                expires_in: data.expires_in,
+                refresh_token: data.refresh_token
+            });
+        return '';
     }
 }
