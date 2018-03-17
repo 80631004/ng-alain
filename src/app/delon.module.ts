@@ -206,7 +206,7 @@ const MOCKMODULE = !environment.production || environment.chore === true ?
         // auth
         AlainAuthModule.forRoot({
             // 受限于 https://github.com/cipchk/ng-alain/issues/246， 只支持字符串形式
-            ignores: [ `\\/login`, `assets\\/`, '\\/admin\\/code\\/' ],
+            ignores: [ `\\/login`, `assets\\/`, '\\/admin/code/', 'auth/oauth/token' ],
             login_url: `/passport/login`
         }),
         // acl
