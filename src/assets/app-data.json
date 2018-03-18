@@ -34,7 +34,16 @@
                 "link": "/dashboard/workplace",
                 "i18n": "dashboard_workplace"
             }]
-        }, {
+        },
+        {
+            "text": "系统管理",
+            "icon": "icon-grid",
+            "children": [{
+                "text": "用户管理",
+                "link": "/sysmgr/usermgr/list"
+            }]
+        },
+        {
             "text": "快捷菜单",
             "i18n": "shortcut",
             "icon": "icon-rocket",
@@ -125,6 +134,10 @@
                 "text": "Clipboard",
                 "link": "/other/clipboard",
                 "i18n": "clipboard"
+            }, {
+                "text": "Print",
+                "link": "/other/print",
+                "i18n": "print"
             }]
         }, {
             "text": "表单",
