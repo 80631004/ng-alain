@@ -3,6 +3,7 @@ import { NzMessageService } from 'ng-zorro-antd';
 import { _HttpClient } from '@delon/theme';
 import { tap, map } from 'rxjs/operators';
 import { Router, ActivatedRoute } from '@angular/router';
+import { SFSchema } from 'nz-schema-form';
 
 @Component({
     selector: 'usermgr-list',
@@ -12,24 +13,15 @@ export class UserMgrListComponent implements OnInit {
     q: any = {
         page: 1,
         limit: 10,
-        orderByField: '',
-        username: ''
+        orderByField: ''
     };
     data: any[] = [];
+    nzTotal: any;
     loading = false;
-    selectedRows: any[] = [];
-    curRows: any[] = [];
-    totalCallNo = 0;
-    allChecked = false;
-    indeterminate = false;
-    status = [
-        { text: '关闭', value: false, type: 'default' },
-        { text: '运行中', value: false, type: 'processing' },
-        { text: '已上线', value: false, type: 'success' },
-        { text: '异常', value: false, type: 'error' }
-    ];
+    listQueryShema: any = {};
+    listQueryModel: any = {};
     sortMap: any = {};
-    expandForm = false;
+
     modalVisible = false;
     description = '';
     
@@ -37,13 +29,26 @@ export class UserMgrListComponent implements OnInit {
     constructor(private router: Router, private route: ActivatedRoute, private http: _HttpClient, public msg: NzMessageService) {}
 
     ngOnInit() {
-        this.getData();
+        this.listQueryShema = JSON.parse(require('!!raw-loader!./usermgr-list-schema.json'));
+        this.listQueryModel = {email: 'cipchk@qq.com'};
+        this.getData({});
     }
 
-    getData() {
+    actions = {
+        send: (form: any) => {
+        // this.msg.success(JSON.stringify(form.value));
+           this.getData(form.value);
+        },
+        reset: (form: any) => {
+            form.reset({});
+        }
+    };
+
+    getData(formJson: any) {
         this.pageChange(1).then(() => {
-            this.http.get('admin/user/userPage', this.q).subscribe((res: any) => {
+            this.http.get('admin/user/userPage', Object.assign({}, this.q, formJson)).subscribe((res: any) => {
                 this.data = res.records;
+                this.nzTotal = res.total;
             });
         });
     }
@@ -57,55 +62,27 @@ export class UserMgrListComponent implements OnInit {
     save() {
         this.loading = true;
         this.http.post('/rule', { description: this.description }).subscribe(() => {
-            this.getData();
+            // this.getData();
             setTimeout(() => this.modalVisible = false, 500);
         });
     }
 
     remove() {
-        this.http.delete('/rule', { nos: this.selectedRows.map(i => i.no).join(',') }).subscribe(() => {
-            this.getData();
-            this.clear();
-        });
+        // this.http.delete('/rule', { nos: this.selectedRows.map(i => i.no).join(',') }).subscribe(() => {
+        //     this.getData();
+
+        // });
     }
 
     approval() {
-        this.msg.success(`审批了 ${this.selectedRows.length} 笔`);
-    }
-
-    clear() {
-        this.selectedRows = [];
-        this.totalCallNo = 0;
-        this.data.forEach(i => i.checked = false);
-        this.refreshStatus();
-    }
-
-    checkAll(value: boolean) {
-        this.curRows.forEach(i => {
-            if (!i.disabled) i.checked = value;
-        });
-        this.refreshStatus();
-    }
-
-    refreshStatus() {
-        const allChecked = this.curRows.every(value => value.disabled || value.checked);
-        const allUnChecked = this.curRows.every(value => value.disabled || !value.checked);
-        this.allChecked = allChecked;
-        this.indeterminate = (!allChecked) && (!allUnChecked);
-        this.selectedRows = this.data.filter(value => value.checked);
-        this.totalCallNo = this.selectedRows.reduce((total, cv) => total + cv.callNo, 0);
+        // this.msg.success(`审批了 ${this.selectedRows.length} 笔`);
     }
 
     sort(field: string, value: any) {
         this.sortMap = {};
         this.sortMap[field] = value;
         this.q.sorter = value ? `${field}_${value}` : '';
-        this.getData();
-    }
-
-    dataChange(res: any) {
-        this.curRows = res;
-        this.refreshStatus();
+        // this.getData();
     }
 
     pageChange(page: number): Promise<any> {
@@ -117,10 +94,5 @@ export class UserMgrListComponent implements OnInit {
                 resolve();
             }, 500);
         });
-    }
-
-    reset(ls: any[]) {
-        for (const item of ls) item.value = false;
-        this.getData();
     }
 }
