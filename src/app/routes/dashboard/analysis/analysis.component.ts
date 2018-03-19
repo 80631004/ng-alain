@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { getTimeDistance, yuan } from '@delon/abc';
 import { _HttpClient } from '@delon/theme';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { CHARTS } from '../../../../../_mock/_chart';
 
 @Component({
     selector: 'app-dashboard-analysis',
@@ -25,10 +27,19 @@ export class DashboardAnalysisComponent implements OnInit {
         };
     });
 
+    todos: Observable<any>;
+    _todos: BehaviorSubject<any>; 
+    
     constructor(private http: _HttpClient, public msg: NzMessageService) {}
 
     ngOnInit() {
-        this.http.get('/chart').subscribe((res: any) => {
+        this._todos = <BehaviorSubject<any[]>>new BehaviorSubject([]);
+        this._todos.next(Object.assign({}, CHARTS['/chart']));
+
+        this.todos = this._todos.asObservable();
+
+        this.todos.subscribe((res: any) => {
+        // this.http.get('/chart').subscribe((res: any) => {
             res.offlineData.forEach((item: any) => {
                 item.chart = Object.assign([], res.offlineChartData);
             });

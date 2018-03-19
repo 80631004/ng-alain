@@ -1,6 +1,8 @@
 import { NzMessageService } from 'ng-zorro-antd';
 import { Component, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
+import { CHARTS } from '../../../../../_mock/_chart';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Component({
     selector: 'app-dashboard-v1',
@@ -25,11 +27,22 @@ export class DashboardV1Component implements OnInit {
     salesData: any[] =  [ ];
     offlineChartData: any[] = [];
 
+    todos: Observable<any>;
+     _todos: BehaviorSubject<any>; 
     ngOnInit() {
-        this.http.get('/chart').subscribe((res: any) => {
+        this._todos = <BehaviorSubject<any[]>>new BehaviorSubject([]);
+        this._todos.next(Object.assign({}, CHARTS['/chart']));
+        this.todos = this._todos.asObservable();
+        this.todos.subscribe((res: any) => {
             this.webSite = res.visitData.slice(0, 10);
             this.salesData = res.salesData;
             this.offlineChartData = res.offlineChartData;
         });
+        /*
+        this.http.get('/chart').subscribe((res: any) => {
+            this.webSite = res.visitData.slice(0, 10);
+            this.salesData = res.salesData;
+            this.offlineChartData = res.offlineChartData;
+        });*/
     }
 }

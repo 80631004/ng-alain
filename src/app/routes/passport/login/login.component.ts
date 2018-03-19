@@ -90,6 +90,7 @@ export class UserLoginComponent implements OnDestroy {
             if (this.mobile.invalid || this.captcha.invalid) return;
         }
 
+        /*
         this.loginService.login({
             'type': this.type,
             'username': this.userName.value,
@@ -99,8 +100,9 @@ export class UserLoginComponent implements OnDestroy {
         }).then(() => {
             this.router.navigate(['/']);
         });
+        */
         // mock http
-        /*
+        
         this.loading = true;
         setTimeout(() => {
             this.loading = false;
@@ -121,7 +123,7 @@ export class UserLoginComponent implements OnDestroy {
                 time: +new Date
             });
             this.router.navigate(['/']);
-        }, 1000);*/
+        }, 1000);
     }
 
     // region: social
